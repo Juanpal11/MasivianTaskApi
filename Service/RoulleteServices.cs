@@ -1,26 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
-using ReoulleteApi.Contracts.Roullete;
-using ReoulleteApi.Domain.Dtos;
-using ReoulleteApi.Domain.Entities;
-using ReoulleteApi.Entities;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="RoulleteServices.cs" company="Task">
+//     Company copyright tag.
+// </copyright>
+// <summary>
+// The Roullete Services.
+// </summary>
+//-----------------------------------------------------------------------
 namespace ReoulleteApi.Service
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Microsoft.Extensions.Caching.Distributed;
+    using Newtonsoft.Json;
+    using ReoulleteApi.Contracts.Roullete;
+    using ReoulleteApi.Domain.Dtos;
+    using ReoulleteApi.Domain.Entities;
+    using ReoulleteApi.Entities;
+
+    /// <summary>
+    /// The roulette services class.
+    /// </summary>
     public class RoulleteServices : IRoulleteServices
     {
+        /// <summary>
+        /// Random.
+        /// </summary>
+        private readonly Random _random = new Random();
+
+        /// <summary>
+        /// The DistributedCache interface.
+        /// </summary>
         private readonly IDistributedCache distributedCache;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RoulleteServices"/> class.
+        /// </summary>
+        /// <param name="distributedCache">The distributed cache.</param>
         public RoulleteServices(IDistributedCache distributedCache)
         {
             this.distributedCache = distributedCache;
         }
 
-        public string GenerateID() {
+        /// <summary>
+        /// Generates a random string id.
+        /// </summary>
+        /// <returns>Returns a random string id.</returns>
+        public string GenerateID() 
+        {
             try
             {
                 var roullete = new Roullete();
@@ -32,7 +59,6 @@ namespace ReoulleteApi.Service
                 SaveList(roullete.Open, roulleteId);
 
                 return text;
-
             }
             catch (StackExchange.Redis.RedisTimeoutException timeout)
             {
@@ -40,7 +66,13 @@ namespace ReoulleteApi.Service
             }
         }
 
-        public string AllowDenyAccess(string roullete_Id) {
+        /// <summary>
+        /// Allow or deny access to a roulette by id.
+        /// </summary>
+        /// <param name="roullete_Id">The roulette id.</param>
+        /// <returns>Returns allow or deny acess message.</returns>
+        public string AllowDenyAccess(string roullete_Id) 
+        {
             try 
             {
                 var redisRoulleteId = this.distributedCache.GetString(roullete_Id);
@@ -59,6 +91,13 @@ namespace ReoulleteApi.Service
             }
         }
 
+        /// <summary>
+        /// Creates a bet.
+        /// </summary>
+        /// <param name="UserId">The user id.</param>
+        /// <param name="roullete_Id">The roulette id.</param>
+        /// <param name="request">The request.</param>
+        /// <returns>Returns succes or fail bet creation message.</returns>
         public string Bet(string UserId, string roullete_Id, BetDto request)
         {
             try
@@ -71,6 +110,7 @@ namespace ReoulleteApi.Service
                     {
                         return "This roullet has been closed";
                     }
+
                     var funds = request.CashAmount;
                     var number = request.Number;
                     dataRoullete.Users.Add(new User() { UserId = UserId, Funds = funds, Number = number });
@@ -92,6 +132,11 @@ namespace ReoulleteApi.Service
             }
         }
 
+        /// <summary>
+        /// Close a roulette.
+        /// </summary>
+        /// <param name="roullete_Id">The roullete Id.</param>
+        /// <returns>Returns succes or fail message of close.</returns>
         public string Close(string roullete_Id)
         {
             List<string> winners = new List<string>();
@@ -116,12 +161,14 @@ namespace ReoulleteApi.Service
                         winners.Add(user.UserId);
                         continue;
                     }
+
                     if (user.Number == 37 && colorNumber == "black")
                     {
                         user.Funds *= 1.8f;
                         winners.Add(user.UserId);
                         continue;
                     }
+
                     if (user.Number == 38 && colorNumber == "red")
                     {
                         user.Funds *= 1.8f;
@@ -141,15 +188,24 @@ namespace ReoulleteApi.Service
 
             return "This roullet id " + roullete_Id + " does not exist";
         }
-
-
-        private readonly Random _random = new Random();
    
+        /// <summary>
+        /// Generates a random number.
+        /// </summary>
+        /// <param name="min">The min value.</param>
+        /// <param name="max">The max value.</param>
+        /// <returns>Returns a random number.</returns>
         public int RandomNumber(int min, int max)
         {
             return _random.Next(min, max);
         }
 
+        /// <summary>
+        /// Save a list of roulettes.
+        /// </summary>
+        /// <param name="isOpen">The open status.</param>
+        /// <param name="roullete_Id">The roullete Id.</param>
+        /// <returns>Returns succes or fail message.</returns>
         public string SaveList(bool isOpen, string roullete_Id)
         {
             RoulleteList list = new RoulleteList();
@@ -179,6 +235,12 @@ namespace ReoulleteApi.Service
             }
         }
 
+        /// <summary>
+        /// Update the list of roulettes.
+        /// </summary>
+        /// <param name="isOpen">The open status.</param>
+        /// <param name="roullete_Id">The roullete Id.</param>
+        /// <returns>Returns success or fail message.</returns>
         public string UpdateList(bool isOpen, string roullete_Id)
         {
             try
@@ -208,6 +270,10 @@ namespace ReoulleteApi.Service
             }
         }
 
+        /// <summary>
+        /// List all roulettes.
+        /// </summary>
+        /// <returns>Returns a string with all roulettes.</returns>
         public string ListRoulletes()
         {
             string keyName = "roulletes";
@@ -227,21 +293,21 @@ namespace ReoulleteApi.Service
                     {
                         open = "closed";
                     }
+
                     var id = dataRoullete.List[i].RoulleteId;
-                    list.Add(id, open);
-                    
+                    list.Add(id, open);             
                 }
-                string dictionaryString = "";
+
+                string dictionaryString = string.Empty;
                 foreach (KeyValuePair<string, string> keyValues in list)
                 {
                     dictionaryString += "Roullete Id: " + keyValues.Key + " Status : " + keyValues.Value + ", \n";
                 }
+
                 return dictionaryString.TrimEnd(',', ' ');
             }
 
             return "Error processing roullete list";
         }
     }
-
 }
-

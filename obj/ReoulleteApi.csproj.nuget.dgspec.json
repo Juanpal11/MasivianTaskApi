@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\juan.bedoya\\Desktop\\RoulleteApi\\ReoulleteApi\\ReoulleteApi.csproj": {}
+    "C:\\Users\\user\\Desktop\\ReoulleteApi\\ReoulleteApi.csproj": {}
   },
   "projects": {
-    "D:\\juan.bedoya\\Desktop\\RoulleteApi\\ReoulleteApi\\ReoulleteApi.csproj": {
+    "C:\\Users\\user\\Desktop\\ReoulleteApi\\ReoulleteApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\juan.bedoya\\Desktop\\RoulleteApi\\ReoulleteApi\\ReoulleteApi.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\ReoulleteApi\\ReoulleteApi.csproj",
         "projectName": "ReoulleteApi",
-        "projectPath": "D:\\juan.bedoya\\Desktop\\RoulleteApi\\ReoulleteApi\\ReoulleteApi.csproj",
-        "packagesPath": "C:\\Users\\juan.bedoya\\.nuget\\packages\\",
-        "outputPath": "D:\\juan.bedoya\\Desktop\\RoulleteApi\\ReoulleteApi\\obj\\",
+        "projectPath": "C:\\Users\\user\\Desktop\\ReoulleteApi\\ReoulleteApi.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\ReoulleteApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\juan.bedoya\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -69,7 +69,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
